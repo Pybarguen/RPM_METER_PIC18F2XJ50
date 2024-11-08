@@ -54,36 +54,47 @@
 
 int counter;
 char character_buffer[];
+char rpm_value[];
 int not = 1;
 int seconds;
-int value;
+int value = 0;
+float rpm_real;
 #include <xc.h>
 #define _XTAL_FREQ 16000000
 #include <stdio.h>
 #include "Fonts.h"
+#include "Image.h"
 #include "PIC2XJ50_SPI.h"
-#include "St7735_Widgets.h"
 #include "ST7735.h"
 
 void __interrupt(high_priority) tcInt(void)
 {
     if (TMR1IE && TMR1IF) {  // any timer 0 interrupts?
            
-       
+        value = TMR0;
+                     
           counter++;
-                  if(counter>=61){
+                  if(counter>=7462){
                       not = !not;
                       counter = 0;
                       seconds = seconds+1;
-                     
+                      rpm_real = (value/12)*60;                      
+                      TMR0 = 0;
+                      value = 0;
                   }
-          if(seconds>=5)
+          if(seconds>=6)
           {
          TMR2ON = 1;
+         CCPR1L = 0b00110000;  
           }
-           TMR1H = 0;
+          /*
+          if(seconds>=18)
+          {
         
-             TMR1L = 0;
+         CCPR1L = 0b10000000;  
+          }
+         */
+           TMR1 = 65000;
        
           TMR1IF=0;
        
@@ -142,26 +153,25 @@ void main(void) {
     DCs = 0;
     
    //TFT DISPLAY INIT
-    ST7735S_Init(ST7735S_80_x_160);
-    ST7735S_Fill_display(Black_Color);
+    ST7735S_Init(ST7735_128_x_160);
+    
     
     TRISBbits.TRISB7 = 0;
     
-    T0CON =  0b01111000;
+    T0CON =  0b00111000;
     TMR0L = 0;   
     T0CONbits.TMR0ON = 1;
 
     T1CON = 00001011;//Se activa el Timer 1, Timer 1 de 16bits, prescaler de 1, fuente de reloj Fosc/4    
     TMR1IF = 0;
     PIE1bits.TMR1IE = 1;//Se activa la interrupcion del TIMER1
-    TMR1L = 0;
-    TMR1H = 0;
+    TMR1 = 65000;
 
     
     TRISCbits.TRISC2 = 0;
     PR2 = 255;    
     //Duty Cycle 512
-    CCPR1L = 0b10000000;  
+    CCPR1L = 0b01000000;  
     T2CON =  0b00000011;    
     CCP1CON = 0b00001100; 
     TCLKCONbits.T3CCP2 = 0; 
@@ -172,17 +182,23 @@ void main(void) {
    
  
    
-    
+    ST7735S_Fill_display(Background_T);
+   ST7735S_Fill_image(Image_array);
       while(1)
     {
-        value = TMR0L;
-     //sprintf(character_buffer, "%d", value);    
-    // ST7735S_Print_String(Blue_Color, character_buffer, 5, 5, 2);
+     
+     
+     ST7735S_Print_String(Blue_Color, "RPM", 0, 110, 1);
+     
+     sprintf(rpm_value, "%d", value);    
+     ST7735S_Print_String(Blue_Color, rpm_value, 0, 120, 2);
      
        LATBbits.LATB7 = not;
        
+     ST7735S_Print_String(Blue_Color, "Time (s)", 0, 140, 1);
+     
         sprintf(character_buffer, "%d", seconds);    
-     ST7735S_Print_String(Blue_Color, character_buffer, 5, 20, 2);
+     ST7735S_Print_String(Blue_Color, character_buffer, 70, 140, 2);
 
          
     }

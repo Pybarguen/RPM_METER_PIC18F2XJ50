@@ -146,131 +146,6 @@ void write_color(int data)
     
 }
 
-//INIT 80 x 160 TFT Display
-void ST7735S_80_x_160_init() {
-    
-     DCs = 0; 
-    write_command(SWRESET);//software reset
-     __delay_ms(150);
-    write_command(SLPOUT);//sleep mode out
-     __delay_ms(255);   
-     
-     
-
-    DCs = 0; 
-    write_command(FRMCTR1);//Frame rate control in normal mode
-    DCs = 1; 
-    write_data(0x01);
-    write_data(0x2C);
-    write_data(0x2D);    
-    DCs = 0; 
-    write_command(FRMCTR2);//Frame rate control in idle mode
-    DCs = 1; 
-    write_data(0x01);
-    write_data(0x2C);
-    write_data(0x2D);
-    
-    DCs = 0; 
-    write_command(FRMCTR3);//Frame rate control in Partial mode
-    DCs = 1; 
-    write_data(0x01);
-    write_data(0x2C);
-    write_data(0x2D);
-    write_data(0x01);
-    write_data(0x2C);
-    write_data(0x2D);
-    
-    DCs = 0; 
-    write_command(INVCTR);//Display inversion control
-    DCs = 1; 
-    write_data(0x07);//Frame version in all modes
-      
-    DCs = 0; 
-    write_command(PWCTR1);//Power control 1
-    DCs = 1; 
-    write_data(0x02);//4.7V
-    write_data(0x02);//1.5uA
-    write_data(0x84);//Auto mode
-    
-    DCs = 0; 
-    write_command(PWCTR2);
-    DCs = 1; 
-    write_data(0xC5);//VGH VGL
-     
-    DCs = 0; 
-    write_command(PWCTR3);
-    DCs = 1; 
-    write_data(0x0A);//
-    write_data(0x00);//
-     
-    DCs = 0; 
-    write_command(PWCTR4);
-    DCs = 1; 
-    write_data(0x8A);//
-    write_data(0x2A);//
-    
-    DCs = 0; 
-    write_command(PWCTR5);
-    DCs = 1;
-    write_data(0x8A);//
-    write_data(0xEE);//
-      
-    DCs = 0;   
-    write_command(VMCTR1);
-    DCs = 1;
-    write_data(0x0E);//
-     
-    
-    DCs = 0;  
-    write_command(INVOFF);//      
-    write_command(COLMOD);//RGB pixel format
-    DCs = 1;
-    write_data(0x05);//16bit pixel
-      
-      
-    DCs = 0;    
-    write_command(MADCTL);//Memory access control
-    DCs = 1;
-    write_data(0b01011000);//RGB mode      
-      
-
-   // write_command(MADCTL);//Memory access control
-      
-      
-      
-     
-      __delay_ms(10);
-      DCs = 0; 
-      write_command(GMCTRP1);//RGB pixel format 
-      DCs = 1;
-       write_data(0x02);write_data(0x1C);write_data(0x07);write_data(0x12);
-       write_data(0x37);write_data(0x32);write_data(0x29);write_data(0x2D);
-       write_data(0x29);write_data(0x25);write_data(0x2B);write_data(0x39);
-       write_data(0x00);write_data(0x01);write_data(0x03);write_data(0x10);
-       
-       DCs = 0;
-       write_command(GMCTRN1);//RGB pixel format 
-       DCs = 1;
-       write_data(0x03);write_data(0x1D);write_data(0x07);write_data(0x06);
-       write_data(0x2E);write_data(0x2C);write_data(0x29);write_data(0x2D);
-       write_data(0x2E);write_data(0x2E);write_data(0x37);write_data(0x3F);
-       write_data(0x00);write_data(0x00);write_data(0x02);write_data(0x10);
-       
-        DCs = 0;
-       write_command(NORON);//
-        __delay_ms(10);
-       write_command(DISPON);//
-        __delay_ms(150);
-        
-        DCs = 0;   
-        write_command(VMCTR1);
-        DCs = 1;
-        write_data(0x0E);//
-       
-    
-       
-    
-}
 
 //INIT ST7735 128 X 160 TFT Display
 void ST7735_128_x_160_init() {
@@ -390,13 +265,8 @@ void ST7735_128_x_160_init() {
 void ST7735S_Init(enum DISPLAY_MODEL data)
 {
     TFT_MODEL  = data;
-    if(data == ST7735S_80_x_160)
-    {
-        ST7735S_80_x_160_init();
-       
-        
-    }
-    else if(data == ST7735_128_x_160)
+  
+     if(data == ST7735_128_x_160)
     {
         
         ST7735_128_x_160_init();
@@ -407,21 +277,11 @@ void ST7735S_Init(enum DISPLAY_MODEL data)
 }
 void Set_Display_Cursor(uint8_t X_s, uint8_t Y_s, uint8_t X_end, uint8_t Y_end)
 {
-      if(TFT_MODEL == ST7735S_80_x_160)
+     
+   if(TFT_MODEL== ST7735_128_x_160)
     {
-          
-          
-     PMouse_data->Position.y_start = 26+Y_s;
-     PMouse_data->Position.x_start = 1+X_s;
-     PMouse_data->Position.y_end = PMouse_data->Position.y_start+Y_end;
-     PMouse_data->Position.x_end = PMouse_data->Position.x_start+X_end;
-  
-   
-    }
-    else if(TFT_MODEL== ST7735_128_x_160)
-    {
-     PMouse_data->Position.x_start = X_s;  
-     PMouse_data->Position.y_start = Y_s;
+     PMouse_data->Position.x_start = 2+X_s;  
+     PMouse_data->Position.y_start = 1+Y_s;
      PMouse_data->Position.x_end = PMouse_data->Position.x_start+X_end;
      PMouse_data->Position.y_end = PMouse_data->Position.y_start+Y_end;
        
@@ -454,13 +314,8 @@ void Set_Color(int Temp_Color)
 {
     
     
-     if(TFT_MODEL == ST7735S_80_x_160)
-    {
-       color_img = Temp_Color;
-       
-        
-    }
-    else if(TFT_MODEL == ST7735_128_x_160)
+   
+    if(TFT_MODEL == ST7735_128_x_160)
     {
         
         color_img = ~Temp_Color;
@@ -472,25 +327,7 @@ void Set_Color(int Temp_Color)
 }
  
     
-void ST7735S_Fill_rect()
-{
-    
-     
-  
-       
-  Set_Display_Cursor(0, 0, 20,20);
-   
 
- 
-    for( i =0; i<=400; i++)
-  {
-    
-   write_color(0xF0);  
-   write_color(0xF0); 
-  
-    
-}
-}
 
 
 
@@ -637,12 +474,12 @@ void ST7735S_Fill_image(int Image_arr[])
 {
     
   
-Set_Display_Cursor(0, 0,67,99);
+Set_Display_Cursor(14, 0, 113, 99);
         
         
       
   
-  for(int i =0; i<=6800; i++)
+  for(int i =0; i<=10000; i++)
   {
       
           
@@ -652,217 +489,10 @@ Set_Display_Cursor(0, 0,67,99);
   
   }
 }
-#ifdef St7735_Widgets
 
 
-void ST7735_Progress_Bar(ProgressBar *ProgressBarObj)
-{
-    
-     P_ProgressBar_animation->Get_Values.Current_Value = 0x00;
-     P_ProgressBar_animation->Get_Values.Last_Value = 0x00;
-    
-            
-    Set_Display_Cursor(ProgressBarObj->Coordinates.x_start, ProgressBarObj->Coordinates.y_start,
-    ProgressBarObj->Coordinates.Widht, ProgressBarObj->Coordinates.Height);
-    
-  
-
-    
-     for(i=0; i<=ProgressBarObj->Coordinates.Widht; i++)
-     {
-         for(j=0; j<=ProgressBarObj->Coordinates.Height; j++)
-         {
-             if(j==0 | i ==0 | i ==  ProgressBarObj->Coordinates.Widht| j == ProgressBarObj->Coordinates.Height )
-             {
-                 
-                 Set_Color(ProgressBarObj->Coordinates.Color_border);                  
-                    write_color(color_img >> 8);  
-                    write_color(color_img & 0xFF);
-                    
-             }
-             else{
-                    Set_Color(ProgressBarObj->Coordinates.Color_background);                    
-                    write_color(color_img >> 8);  
-                    write_color(color_img & 0xFF);
-                  
-             }
-          
-             
-             }
-             
-         
-         
-         
-         
-     }
-      
-        }
-
-void ST7735_Animating_ProgressBar( ProgressBar *ProgressBarObj, unsigned long value, char text[])
-{    
-    
-     P_ProgressBar_animation->Get_Values.Current_Value = (int)(value);
-     
-     if(P_ProgressBar_animation->Get_Values.Current_Value >= P_ProgressBar_animation->Get_Values.Last_Value)
-     {
-         
-     PMouse_data->Position.x_start = 2+ ProgressBarObj->Coordinates.x_start;   
-     PMouse_data->Position.y_start = 27+ ProgressBarObj->Coordinates.y_start; 
-     PMouse_data->Position.x_end = ( PMouse_data->Position.x_start + (ProgressBarObj->Coordinates.Widht-1));
-     PMouse_data->Position.y_end = ( PMouse_data->Position.y_start + (ProgressBarObj->Coordinates.Height-2));
-     k = ((value*ProgressBarObj->Coordinates.Widht)/r);
-     color_img = 0xE0E0;
-     
-     DCs = 0;    
-    write_command(MADCTL);//Memory access control
-    DCs = 1;
-    //  write_data(0b11110100);//RGB mode
-      write_data(0b11110100);//RGB mode    
-     }
-     
-     
-     else
-     {
-     PMouse_data->Position.x_start = 132-ProgressBarObj->Coordinates.Widht-1;   
-     PMouse_data->Position.y_start = 27+ ProgressBarObj->Coordinates.y_start; 
-     PMouse_data->Position.x_end = 132;
-     PMouse_data->Position.y_end = ( PMouse_data->Position.y_start + (ProgressBarObj->Coordinates.Height-2));
-      k = 70-((value*ProgressBarObj->Coordinates.Widht)/r);
-     DCs = 0;    
-    write_command(MADCTL);//Memory access control
-    DCs = 1;
-    //  write_data(0b11110100);//RGB mode
-      write_data(0b10110100);//RGB mod
-     color_img = 0xF0F0;
-     }
-     P_ProgressBar_animation->Get_Values.Last_Value = (int)(value);
-     /*
-     PMouse_data->Position.x_start = 2+ ProgressBarObj->Coordinates.x_start;   
-     PMouse_data->Position.y_start = 27+ ProgressBarObj->Coordinates.y_start; 
-     PMouse_data->Position.x_end = ( PMouse_data->Position.x_start + (ProgressBarObj->Coordinates.Widht-1));
-     PMouse_data->Position.y_end = ( PMouse_data->Position.y_start + (ProgressBarObj->Coordinates.Height-2));
- 
-       */
-    
-    
-        DCs = 0;
-        write_command(CASET);
-        DCs = 1;
-        write_data(0);
-        write_data(PMouse_data->Position.y_start);//ST7735S column start in address 25
-        write_data(0);
-        write_data(PMouse_data->Position.y_end);
-        DCs = 0;
-        write_command(RASET);
-        DCs = 1;
-        write_data(0);
-        write_data(PMouse_data->Position.x_start);
-        write_data(0);
-        write_data(PMouse_data->Position.x_end);
 
 
-        DCs = 0;
-        write_command(RAMWR); // Write to RAM
-        CCS = 0;
-        DCs = 1; 
-       
-  
-        
-        
-   
-         for(i=0; i<k; i++)
-         {
-             
-              for( j=0; j<=(ProgressBarObj->Coordinates.Height-2); j++)
-              {
-                  write_color(color_img >> 8);  
-                    write_color(color_img & 0xFF);
-                     __delay_ms(10);
-                 
-
-              }
-    
-         }
-}
-void print_7_segments(uint8_t X_pos, uint8_t Y_pos, char number, uint8_t Size, int color)
-{
- 
-     
-      Temporal_data_y = ((16*Size)-1);
-      Temporal_data_x = ((8*Size)-1);
-       
-      
-      Set_Display_Cursor(X_pos, Y_pos, Temporal_data_x, Temporal_data_y);
- 
-    
-      
-      for(i=0;i<=7;i++)
-      {
-          
-      line_Display_pixel = Segments_Display_pixel[number-48][i];
-          for(iterator=0; iterator<Size; iterator++)
-       {
-      
-      for(j=0;j<=15;j++)
-      {
-          if( line_Display_pixel & 1)
-          {      Set_Color(color);   
-               for(Set_size =0; Set_size<=(Size-1); Set_size++)
-                
-                {    
-                 write_color(color_img >> 8);  
-                write_color(color_img & 0xFF); 
-                     __delay_ms(1);   
-             } 
-                  
-          }
-          else
-          {
-              
-            Set_Color(background); 
-              for(Set_size =0; Set_size<=(Size-1); Set_size++)
-                
-                {   
-                 write_color(color_img >> 8);  
-                write_color(color_img & 0xFF); 
-                __delay_ms(1); 
-              }
-          }
-           line_Display_pixel>>=1;  
-      }
-      if(j>=15)
-      {
-      line_Display_pixel  = Segments_Display_pixel[number-48][i];
-      }
-    
-}
-    
-}
-  
- 
-    
-    
- 
-}
-void print_7_segments_string(uint8_t X_pos, uint8_t Y_pos, char display_number[], uint8_t Size, int color)
-{
-   
-    uint8_t Wix;
-    Wix = 0;
-   do
-    {
-       
-      temporal_C  = display_number[Wix];  
-      if(temporal_C != '\0'){
-      print_7_segments(X_pos, Y_pos, temporal_C, Size, Blue_Color); 
-      X_pos += (7*Size)+4;
-      
-      }
-     Wix++;
-    }while(temporal_C!='\0');
-    
-}
-    
 #endif
 
      
@@ -886,5 +516,4 @@ void print_7_segments_string(uint8_t X_pos, uint8_t Y_pos, char display_number[]
 
 
 
-#endif	/* XC_HEADER_TEMPLATE_H */
 

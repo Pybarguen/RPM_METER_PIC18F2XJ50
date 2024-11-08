@@ -35,10 +35,11 @@
 
 //16bits Colors
 #define Red_Color   0b0000011111111111
-#define Green_Color 0b1111100000011111
+#define Green_Color 0b1111100000011111                   
 #define Blue_Color 0xFFE0
 #define Black_Color 0xFFFF
 #define White_Color 0x0000
+#define Background_T 0b1101111011011011
 
 
 //matrix for ASCII Characters
