@@ -55,7 +55,7 @@
 int counter;
 char character_buffer[];
 char rpm_value[];
-int not = 1;
+
 int seconds;
 int value = 0;
 float rpm_real;
@@ -75,7 +75,7 @@ void __interrupt(high_priority) tcInt(void)
                      
           counter++;
                   if(counter>=7462){
-                      not = !not;
+                     
                       counter = 0;
                       seconds = seconds+1;
                       rpm_real = (value/12)*60;                      
@@ -85,15 +85,10 @@ void __interrupt(high_priority) tcInt(void)
           if(seconds>=6)
           {
          TMR2ON = 1;
-         CCPR1L = 0b00110000;  
+         CCPR1L = 0b00110100;  
           }
-          /*
-          if(seconds>=18)
-          {
         
-         CCPR1L = 0b10000000;  
-          }
-         */
+        
            TMR1 = 65000;
        
           TMR1IF=0;
@@ -190,10 +185,10 @@ void main(void) {
      
      ST7735S_Print_String(Blue_Color, "RPM", 0, 110, 1);
      
-     sprintf(rpm_value, "%d", value);    
+     sprintf(rpm_value, "%.2f", rpm_real);    
      ST7735S_Print_String(Blue_Color, rpm_value, 0, 120, 2);
      
-       LATBbits.LATB7 = not;
+
        
      ST7735S_Print_String(Blue_Color, "Time (s)", 0, 140, 1);
      

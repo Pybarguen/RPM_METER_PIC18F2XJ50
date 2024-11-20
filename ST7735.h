@@ -496,18 +496,7 @@ Set_Display_Cursor(14, 0, 113, 99);
 #endif
 
      
-     /*
-     if(TFT_MODEL==1)
-         
-    {
-     PMouse_data->Position.y_start = 26;
-     PMouse_data->Position.x_start = 1;
-     PMouse_data->Position.y_end = PMouse_data->Position.y_start+80;
-     PMouse_data->Position.x_end = PMouse_data->Position.x_start+159;
-    }
-      * */
-    
-    
+     
     
     
 
